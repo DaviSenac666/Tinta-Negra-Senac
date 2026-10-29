@@ -5,7 +5,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://tinta-negra-senac-api.vercel.app/:path*"
+      "destination": "https://tinta-negra-senac.vercel.app/:path*"
     }
   ]
 }

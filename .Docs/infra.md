@@ -24,7 +24,7 @@ flowchart LR
     apiProd["Projeto Vercel backend — FastAPI/Python"]
     bancoProd[("Supabase PostgreSQL")]
     navegadorProd -->|carrega tela HTTPS| frontProd
-    frontProd -->|rewrite /api/* para API HTTPS| apiProd
+    frontProd -->|rewrite /api/* para https://tinta-negra-senac.vercel.app| apiProd
     apiProd -->|DATABASE_URL| bancoProd
   end
 ```
@@ -49,7 +49,7 @@ Não encontrei um desenho anterior de infraestrutura da IA no repositório. Conf
 
 | Item | Desenvolvimento | Produção planejada |
 | --- | --- | --- |
-| Endereço da API | A tela usa rotas relativas; `VITE_URL_DA_API` fica vazio e o Vite encaminha `/login`, `/me`, `/usuarios` e `/tatuagens` para `127.0.0.1:8000`. | Frontend e backend têm domínios HTTPS Vercel separados. `VITE_URL_DA_API=/api`; `frontend/vercel.json` reescreve `/api/*` para `https://tinta-negra-senac-api.vercel.app/*`. `frontend/.env.production` mantém `/api` para o deploy local com Caddy. |
+| Endereço da API | A tela usa rotas relativas; `VITE_URL_DA_API` fica vazio e o Vite encaminha `/login`, `/me`, `/usuarios` e `/tatuagens` para `127.0.0.1:8000`. | Frontend e backend têm domínios HTTPS Vercel separados. `VITE_URL_DA_API=/api`; `frontend/vercel.json` reescreve `/api/*` para o backend ativo em `https://tinta-negra-senac.vercel.app/*`. `frontend/.env.production` mantém `/api` para o deploy local com Caddy. |
 | Tela | Vite entrega a aplicação; React roda no navegador do computador de desenvolvimento. | Vercel entrega os arquivos Vite pela CDN no projeto frontend. |
 | Banco | PostgreSQL local iniciado pelo Compose; `DATABASE_URL` aponta a API para o banco. | Supabase PostgreSQL remoto; a função backend conecta por `DATABASE_URL`. |
 | Configuração e segredo | `backend/.env` local fornece `ENDERECO_FRONTEND`, `CHAVE_DO_TOKEN` e `DATABASE_URL`; o arquivo não deve ir ao Git. | Variáveis de backend definidas em Settings do Vercel; o frontend recebe somente a URL pública da API em `VITE_URL_DA_API`. |

@@ -63,11 +63,11 @@ No projeto do backend, configure estas variáveis em **Settings → Environment 
 
 - `DATABASE_URL`: URI PostgreSQL do Supabase.
 - `CHAVE_DO_TOKEN`: chave aleatória para assinar os tokens.
-- `ENDERECO_FRONTEND`: origem exata do frontend publicado, `https://tinta-negra-senac.vercel.app`, sem barra no final.
+- `ENDERECO_FRONTEND`: origem exata do frontend publicado, sem barra no final. O proxy da Vercel encaminha as chamadas da API, então o CORS não é usado pelo fluxo normal do navegador.
 
-No painel Vercel, associe `https://tinta-negra-senac.vercel.app` ao projeto frontend e `https://tinta-negra-senac-api.vercel.app` ao projeto backend. O arquivo `frontend/vercel.json` encaminha `/api/*` para o domínio público da API, enquanto `frontend/.env.production` mantém a base `/api`. Assim, o navegador usa o domínio do frontend e a Vercel faz o proxy para a API separada. Se os domínios dos projetos forem outros, atualize também o destino do rewrite.
+Atualmente, `https://tinta-negra-senac.vercel.app` responde como backend, enquanto o frontend publicado está em `https://tinta-negra-senac-zeqs.vercel.app`. O arquivo `frontend/vercel.json` encaminha `/api/*` para o backend ativo em `https://tinta-negra-senac.vercel.app`, e `frontend/.env.production` mantém a base `/api`. Assim, o navegador usa o domínio do frontend e a Vercel faz o proxy para a API separada. Para mover o domínio `tinta-negra-senac.vercel.app` para o frontend, primeiro atribua outro domínio público ao projeto backend e atualize o destino do rewrite para esse novo endereço.
 
-Faça o deploy do backend e confirme `https://tinta-negra-senac-api.vercel.app/health` antes de publicar o frontend. Depois faça o deploy do frontend e teste `https://tinta-negra-senac.vercel.app/`. Se testar Preview Deployments por chamada direta do navegador à API, configure também a origem de preview no backend; o CORS aceita somente a origem exata configurada.
+Faça o deploy do backend e confirme a rota `/health` no domínio público da API antes de publicar o frontend. Depois faça o deploy do frontend e teste a página e o login no domínio frontend associado ao projeto. Se testar Preview Deployments por chamada direta do navegador à API, configure também a origem de preview no backend.
 
 O deploy é separado: o navegador acessa o frontend HTTPS e a Vercel encaminha `/api/*` ao projeto FastAPI independente. Não use a URL do Supabase no frontend; `DATABASE_URL` e `CHAVE_DO_TOKEN` ficam somente nas variáveis do projeto backend. O arquivo `backend/app.py` apenas exporta a aplicação existente para o runtime e não inicializa outro servidor local.
 
