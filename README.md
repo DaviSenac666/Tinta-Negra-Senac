@@ -63,13 +63,13 @@ No projeto do backend, configure estas variáveis em **Settings → Environment 
 
 - `DATABASE_URL`: URI PostgreSQL do Supabase.
 - `CHAVE_DO_TOKEN`: chave aleatória para assinar os tokens.
-- `ENDERECO_FRONTEND`: origem exata do frontend publicado, por exemplo `https://meu-frontend.vercel.app`, sem barra no final.
+- `ENDERECO_FRONTEND`: origem exata do frontend publicado, `https://tinta-negra-senac.vercel.app`, sem barra no final.
 
-No projeto do frontend, configure `VITE_URL_DA_API` com a URL HTTPS pública do backend Vercel, sem barra final, por exemplo `https://minha-api.vercel.app`. Essa variável é incorporada ao bundle durante o build; defina-a nos ambientes Vercel em que o frontend será compilado. O `.env.production` local continua com `/api` para Docker/Caddy; a variável do ambiente de build da Vercel deve sobrescrevê-lo.
+No painel Vercel, associe `https://tinta-negra-senac.vercel.app` ao projeto frontend e `https://tinta-negra-senac-api.vercel.app` ao projeto backend. O arquivo `frontend/vercel.json` encaminha `/api/*` para o domínio público da API, enquanto `frontend/.env.production` mantém a base `/api`. Assim, o navegador usa o domínio do frontend e a Vercel faz o proxy para a API separada. Se os domínios dos projetos forem outros, atualize também o destino do rewrite.
 
-Faça o primeiro deploy do backend, copie sua URL pública para `VITE_URL_DA_API` no projeto frontend e faça o deploy do frontend. Em seguida, copie a origem pública do frontend para `ENDERECO_FRONTEND` no backend e redeploye-o. Se testar Preview Deployments, configure também a origem de preview correspondente para o backend; o CORS aceita somente a origem exata configurada. Teste `https://<url-do-backend>/health`, depois o login e as chamadas do frontend.
+Faça o deploy do backend e confirme `https://tinta-negra-senac-api.vercel.app/health` antes de publicar o frontend. Depois faça o deploy do frontend e teste `https://tinta-negra-senac.vercel.app/`. Se testar Preview Deployments por chamada direta do navegador à API, configure também a origem de preview no backend; o CORS aceita somente a origem exata configurada.
 
-O deploy é separado: a tela chama o backend diretamente entre duas origens HTTPS, protegido por CORS e pelo token da API. Não use a URL do Supabase no frontend; `DATABASE_URL` e `CHAVE_DO_TOKEN` ficam somente nas variáveis do projeto backend. O arquivo `backend/app.py` apenas exporta a aplicação existente para o runtime e não inicializa outro servidor local.
+O deploy é separado: o navegador acessa o frontend HTTPS e a Vercel encaminha `/api/*` ao projeto FastAPI independente. Não use a URL do Supabase no frontend; `DATABASE_URL` e `CHAVE_DO_TOKEN` ficam somente nas variáveis do projeto backend. O arquivo `backend/app.py` apenas exporta a aplicação existente para o runtime e não inicializa outro servidor local.
 
 ## Rodar o frontend
 

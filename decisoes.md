@@ -12,4 +12,4 @@ A aplicação lê essa configuração por `frontend/src/api.js`, que centraliza 
 
 ## Deploy independente na Vercel
 
-O deploy separado mantém `VITE_URL_DA_API` como URL HTTPS absoluta do backend Vercel, definida nas variáveis de build do projeto frontend. Essa variável de ambiente prevalece sobre `frontend/.env.production`, que continua como `/api` para o deploy local via Docker/Caddy. O backend expõe o mesmo FastAPI por `backend/app.py` para o runtime Python Vercel; no projeto backend, `ENDERECO_FRONTEND` deve ser a origem HTTPS exata do frontend para CORS. Segredos e `DATABASE_URL` são variáveis exclusivas do backend.
+O deploy separado mantém `VITE_URL_DA_API=/api` e configura em `frontend/vercel.json` um rewrite de `/api/*` para o domínio HTTPS independente do backend Vercel. No Docker/Caddy, o mesmo prefixo `/api` continua sendo encaminhado pela configuração local. O backend expõe o mesmo FastAPI por `backend/app.py` para o runtime Python Vercel; `ENDERECO_FRONTEND` pode ser definido com a origem HTTPS exata para chamadas diretas do navegador. Segredos e `DATABASE_URL` são variáveis exclusivas do backend.
