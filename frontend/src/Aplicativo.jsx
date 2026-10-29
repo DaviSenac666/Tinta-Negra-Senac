@@ -1087,6 +1087,7 @@ function TelaCadastroTatuador({ aoVoltar }) {
   const [email, definirEmail] = useState("");
   const [senha, definirSenha] = useState("");
   const [confirmarSenha, definirConfirmarSenha] = useState("");
+  const [senhaVisivel, definirSenhaVisivel] = useState(false);
   const [salvando, definirSalvando] = useState(false);
   const [erro, definirErro] = useState("");
   const [mensagem, definirMensagem] = useState("");
@@ -1135,10 +1136,38 @@ function TelaCadastroTatuador({ aoVoltar }) {
         <input id="email-tatuador" type="email" autoComplete="email" value={email} onChange={(evento) => definirEmail(evento.target.value)} maxLength="254" required placeholder="tatuador@exemplo.com" />
 
         <label htmlFor="senha-tatuador">Senha (mínimo de 8 caracteres)</label>
-        <input id="senha-tatuador" type="password" autoComplete="new-password" value={senha} onChange={(evento) => definirSenha(evento.target.value)} minLength="8" maxLength="128" required placeholder="Crie uma senha" />
+        <div className="campo-senha">
+          <input id="senha-tatuador" type={senhaVisivel ? "text" : "password"} autoComplete="new-password" value={senha} onChange={(evento) => definirSenha(evento.target.value)} minLength="8" maxLength="128" required placeholder="Crie uma senha" />
+          <button
+            className="botao-visualizar-senha"
+            type="button"
+            aria-label={senhaVisivel ? "Ocultar senha" : "Mostrar senha"}
+            aria-controls="senha-tatuador confirmar-senha-tatuador"
+            aria-pressed={senhaVisivel}
+            onClick={() => definirSenhaVisivel((visivel) => !visivel)}
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              {senhaVisivel ? (
+                <>
+                  <path d="M3 3l18 18" />
+                  <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8" />
+                  <path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c5.5 0 9 7 9 7a15.5 15.5 0 0 1-3.1 3.9" />
+                  <path d="M6.2 6.2C3.9 7.7 3 12 3 12s3.5 7 9 7a9.8 9.8 0 0 0 3.1-.5" />
+                </>
+              ) : (
+                <>
+                  <path d="M2.5 12s3.4-7 9.5-7 9.5 7 9.5 7-3.4 7-9.5 7-9.5-7-9.5-7Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </>
+              )}
+            </svg>
+          </button>
+        </div>
 
         <label htmlFor="confirmar-senha-tatuador">Confirme a senha</label>
-        <input id="confirmar-senha-tatuador" type="password" autoComplete="new-password" value={confirmarSenha} onChange={(evento) => definirConfirmarSenha(evento.target.value)} minLength="8" maxLength="128" required placeholder="Digite a senha novamente" />
+        <div className="campo-senha">
+          <input id="confirmar-senha-tatuador" type={senhaVisivel ? "text" : "password"} autoComplete="new-password" value={confirmarSenha} onChange={(evento) => definirConfirmarSenha(evento.target.value)} minLength="8" maxLength="128" required placeholder="Digite a senha novamente" />
+        </div>
 
         {erro && <p className="aviso aviso-erro" role="alert">{erro}</p>}
         {mensagem && <p className="aviso aviso-sucesso" role="status">{mensagem}</p>}
