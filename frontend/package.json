@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build --configLoader runner",
+    "build:vercel": "vite build --configLoader runner --mode vercel",
     "preview": "vite preview"
   },
   "dependencies": {
